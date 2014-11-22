@@ -1,3 +1,5 @@
+![Wordie view of languages in MTS](http://try-mts.com/content/images/2014/11/mts-languages.png)
+
 This is the source code for the
 [tour of Michigan Terminal System programming languages](http://try-mts.com/programming-languages-in-mts/)
 at http://try-mts.com
