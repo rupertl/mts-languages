@@ -12,6 +12,7 @@ to get it running on your computer.
 Programming languages covered so far:
 
 * BASIC
+* FORTRAN
 
 Please feel free to raise an issue on Github if you have any problems
 running the code.

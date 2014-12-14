@@ -1,0 +1,8 @@
+C *** HELLO WORLD PROGRAM ***
+C
+      DO 10 I=1,5
+      WRITE (6,20)
+   10 CONTINUE
+      STOP
+   20 FORMAT(13H HELLO, WORLD)
+      END
