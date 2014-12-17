@@ -1,14 +1,12 @@
 ## Files in this directory
 
 * `hello.f` - Hello World example
+* `emirp.f` - Calculate emirps
 
-## Running BASIC programs in MTS
+## Running FORTRAN programs in MTS
 
-See [FORTRAN - Introduction](http://try-mts.com/fortran-introduction/)
-for background on the language and how to run it on MTS.
+See [FORTRAN - Introduction](http://try-mts.com/fortran-introduction/) for background on the language and how to run it on MTS. As an example, to compile `emirp.f` using the FORTRANG compiler you'd use the command:
 
-## How to transfer these files from your host OS into MTS
-
-Use the
-[emulated card reader](http://try-mts.com/submitting-batch-jobs-from-the-reader/)
-for a quick way to copy files from your host OS into MTS.
+```
+# run *ftn scards=emirp.f
+```
