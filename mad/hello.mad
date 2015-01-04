@@ -1,0 +1,5 @@
+* HELLO WORLD PROGRAM
+     LOOP FOR I=1, 1, I > 5
+          PRINT COMMENT "Hello, world!"
+     END LOOP
+     END OF PROGRAM
