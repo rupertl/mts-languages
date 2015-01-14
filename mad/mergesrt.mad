@@ -1,0 +1,116 @@
+***************************************************
+* MAD program to demonstrate merge sort on integers
+***************************************************
+
+     CONSTANT LENGTH = 15
+     VECTOR VALUES NUMBERS = 9, 12, 3, 1, 6, 8, 2, 5, 14, 13, 11, 7, 10, 4, 0
+
+     PRINT COMMENT "Before sort"
+     DISPLAY.(NUMBERS, LENGTH)
+
+     MERGESRT.(0, LENGTH, NUMBERS)
+
+     PRINT COMMENT "After sort"
+     DISPLAY.(NUMBERS, LENGTH)
+
+*    Display each value in V     
+     INTERNAL FUNCTION DISPLAY.(V, LEN)
+          INTEGER V(1), LEN
+          LOOP FOR I=0, 1, I >= LEN
+               PRINT RESULTS V(I)
+          END LOOP
+          FUNCTION RETURN
+     END OF FUNCTION
+
+     END OF PROGRAM
+
+***********************************
+* External function to do mergesort
+***********************************
+
+     RECURSIVE EXTERNAL FUNCTION MERGESRT.(LEFT, RIGHT, V)
+          INTEGER LEFT, RIGHT, V(1)
+          INTEGER LSTART, LEND, RSTART, REND
+
+*         Return if nothing left to sort
+          IF (RIGHT - LEFT <= 1)
+               FUNCTION RETURN
+          END IF
+
+*         Define left and right halves
+          LSTART = LEFT
+          LEND = (LEFT + RIGHT) / 2
+          RSTART = LEND
+          REND = RIGHT
+
+*         Recursively sort left and right
+          MERGESRT.(LSTART, LEND, V)
+          MERGESRT.(RSTART, REND, V)
+
+*         Merge two halves
+          MERGE.(LSTART, LEND, RSTART, REND, V)
+          FUNCTION RETURN
+
+*         Merge subvectors of V
+          INTERNAL FUNCTION MERGE.(LSTART, LEND, RSTART, REND, V)
+               INTEGER LSTART, LEND, RSTART, REND, V(1)
+               INTEGER LLEN, RLEN, I, L, R
+               POINTER LHALF, RHALF, LHP, RHP
+               CONSTANT SZ = 4
+
+*              Allocate a temp buffer for each half
+               LLEN = LEND - LSTART
+               RLEN = REND - RSTART
+               ALLOCATE (LLEN * SZ)->LHALF
+               ALLOCATE (RLEN * SZ)->RHALF
+
+*              Copy values into temporaries
+               LHP = LHALF
+               LOOP FOR I=LSTART, 1, I >= LEND
+                    LHP.IND.INTEGER = V(I)
+                    LHP = LHP + SZ
+               END LOOP
+               RHP = RHALF
+               LOOP FOR I=RSTART, 1, I >= REND
+                    RHP.IND.INTEGER = V(I)
+                    RHP = RHP + SZ
+               END LOOP
+
+*              Merge values back into V
+               L = 0
+               R = 0
+               LHP = LHALF
+               RHP = RHALF
+               LOOP FOR I=LSTART, 1, L >= LLEN .OR. R >= RLEN
+*                   If left < right, move left, else move right
+                    IF (LHP.IND.INTEGER < RHP.IND.INTEGER)
+                         V(I) = LHP.IND.INTEGER
+                         L = L + 1
+                         LHP = LHP + SZ
+                    ELSE
+                         V(I) = RHP.IND.INTEGER
+                         R = R + 1
+                         RHP = RHP + SZ
+                    END IF
+               END LOOP
+
+*              Handle leftover values
+               LOOP WHILE L < LLEN
+                    V(I) = LHP.IND.INTEGER
+                    I = I + 1
+                    L = L + 1
+                    LHP = LHP + SZ
+               END LOOP
+               LOOP WHILE R < RLEN
+                    V(I) = RHP.IND.INTEGER
+                    I = I + 1
+                    R = R + 1
+                    RHP = RHP + SZ
+               END LOOP
+
+               RELEASE LHALF
+               RELEASE RHALF
+               FUNCTION RETURN
+          END OF FUNCTION
+    END OF FUNCTION
+    END OF PROGRAM

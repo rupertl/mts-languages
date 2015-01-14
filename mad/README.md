@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.mad` - Hello World example
+* `mergesrt.mad` - Mergesort on integers
 
 ## Running MAD programs in MTS
 
