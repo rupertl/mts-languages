@@ -6,6 +6,7 @@ See [Wikipedia](http://en.wikipedia.org/wiki/Michigan_Terminal_System) for furth
 
 Programming languages covered so far:
 
+* ALGOL 60
 * BASIC
 * FORTRAN
 * MAD
