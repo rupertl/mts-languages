@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.al` - Hello World example
+* `josephus.al` - Josephus problem solution
 
 ## Running ALGOL 60 programs in MTS
 
