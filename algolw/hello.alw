@@ -1,0 +1,9 @@
+begin
+    % Hello World program for ALGOL W %
+    integer I;
+    for I := 1 until 5 do
+    begin
+         write("Hello, world!");
+    end
+end.
+
