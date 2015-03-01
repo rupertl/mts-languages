@@ -1,0 +1,144 @@
+begin
+
+    % Priority queue in ALGOL W %
+
+    %---------------------------%
+    % Constants and definitions %
+    %---------------------------%
+
+    % Item held in priority queue %
+    record Item(integer Priority; string Task);
+
+    % Queue capacity %
+    integer PQ_Capacity;
+    PQ_Capacity := 50;
+
+    begin
+
+        %---------%
+        % Globals %
+        %---------%
+
+        % Queue is implemented as array of references to Items %
+        reference(Item) array PQ(1::PQ_Capacity);
+
+        % Current size of queue %
+        integer PQ_Size;
+
+        %-------------------%
+        % Public procedures %
+        %-------------------%
+
+        % Initialise a queue %
+        procedure PQ_Init();
+        begin
+            PQ_Size := 0;
+        end;
+
+        % Return true if the queue is empty %
+        logical procedure PQ_Is_Empty();
+        begin
+            PQ_Size = 0
+        end;
+
+        % Add a new item to the queue %
+        procedure PQ_Insert(reference(Item) value New_Item);
+        begin
+            % Add to end of array and swim down to maintain %
+            % priority order %
+            PQ_Size := PQ_Size + 1;
+            PQ(PQ_Size) := New_Item;
+            PQ_Swim(PQ_Size);
+        end;
+
+        % Return the first item in the queue by priority %
+        reference(Item) procedure PQ_First;
+        begin
+            PQ(1)
+        end;
+
+        % Return the first item and delete from queue %
+        reference(Item) procedure PQ_Delete_First;
+        begin
+            reference(Item) First;
+
+            PQ_Exchange(1, PQ_Size);
+            First := PQ(PQ_Size);
+            PQ_Size := PQ_Size - 1;
+            PQ_Sink(1);
+            % Just to be safe, null out reference at end %
+            PQ(PQ_Size+1) := null;
+            First
+        end;
+
+        %--------------------%
+        % Private procedures %
+        %--------------------%
+
+        procedure PQ_Swim(integer value K);
+        begin
+            while K > 1 and PQ_Greater(K div 2, K) do
+            begin
+                PQ_Exchange(K, K div 2);
+                K := K div 2;
+            end;
+        end;
+
+        procedure PQ_Sink(integer value k);
+        begin
+            logical Done;
+            Done := false;
+
+            while 2*K <= PQ_Size and not Done do
+            begin
+                integer J;
+                J := 2 * K;
+                if J < PQ_Size and PQ_Greater(J, J+1)
+                then
+                    J := J + 1;
+                if PQ_Greater(K, J)
+                then begin
+                    PQ_Exchange(K, J);
+                    K := J;
+                end
+                else begin
+                    Done := true;
+                end;
+            end
+        end;
+
+        logical procedure PQ_Greater(integer value I; integer value J);
+        begin
+            Priority(PQ(I)) > Priority(PQ(J))
+        end;
+
+        procedure PQ_Exchange(integer value I; integer value J);
+        begin
+            reference(Item) Temp;
+            Temp := PQ(I);
+            PQ(I) := PQ(J);
+            PQ(J) := Temp;
+        end;
+
+        %--------------%
+        % Main program %
+        %--------------%
+
+        % Insert some tasks in random order %
+        PQ_Init();
+        PQ_Insert(Item(3, "Clean drains"));
+        PQ_Insert(Item(4, "Feed cat"));
+        PQ_Insert(Item(5, "Make tea"));
+        PQ_Insert(Item(1, "Solve RC tasks"));
+        PQ_Insert(Item(2, "Tax return"));
+
+        % Remove top priority item from queue and print %
+        while not PQ_Is_Empty() do
+        begin
+            reference(Item) First;
+            First := PQ_Delete_First;
+            write(Priority(First), Task(First));
+        end
+
+    end
+end.

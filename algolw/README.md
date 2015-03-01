@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.alw` - Hello World example
+* `pqueue.alw` - Priority queue
 
 ## Running ALGOL W programs in MTS
 
