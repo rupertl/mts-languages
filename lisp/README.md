@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.l` - Hello World example
+* `4bitadd.l` - 4 bit adder
 
 ## Running LISP programs in MTS
 
