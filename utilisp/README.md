@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.ul` - Hello World example
+* `emirp.ul` - Find the 10,000th emirp (prime number whose reversed digits are also prime)
 
 ## Running UTILISP programs in MTS
 

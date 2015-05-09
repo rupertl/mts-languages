@@ -2,6 +2,7 @@
 
 * `hello.l` - Hello World example
 * `4bitadd.l` - 4 bit adder
+* `emirp.l` - Find the 10,000th emirp (prime number whose reversed digits are also prime)
 
 ## Running LISP programs in MTS
 

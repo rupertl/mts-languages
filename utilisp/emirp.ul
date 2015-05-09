@@ -1,0 +1,45 @@
+;; Checks if n is prime using a simple division test
+(defun prime-p (n)
+  (cond
+   ;; Deal with numbers <= 3
+   ((<= n 1) nil)
+   ((<= n 3) t)
+   ;; Check if divisible by 2 or 3
+   ((= (remainder n 2) 0) nil)
+   ((= (remainder n 3) 0) nil)
+   ;; See if divisible by 5, 7, ..., up to approx sqrt(n)
+   (t (do ((i 5 (+ i 2)) (result nil))
+          (result (eq result 'prime))
+          (setq result (cond ((> (* i i) n) 'prime)
+                             ((= (remainder n i) 0) 'not-prime)
+                             (t nil)))))))
+
+
+;; Return a number that has the reversed digits in n
+(defun reverse-digits (n)
+  (do ((reversed 0) (m n (// m 10)))
+      ((< m 1) reversed)
+      ;; Take last digit from n and append to reversed
+      (setq reversed (* reversed 10))
+      (setq reversed (+ reversed (remainder m 10)))))
+
+
+;; Check if a number is an emirp, ie both it and its reversed digits
+;; are prime.
+(defun emirp-p (n)
+  (let ((reversed (reverse-digits n)))
+    (and (neq n reversed) (prime-p n) (prime-p reversed))))
+
+
+;; Return the 10,000th emirp
+(defun emirp-10k ()
+  (do ((n 0 (+ n 1)) (count 0) (last 0))
+      ((eq count 10000) last)
+      (cond ((emirp-p n) (setq count (+ count 1)) (setq last n)))))
+
+;; Compile everything
+(compile prime-p reverse-digits emirp-p emirp-10k)
+
+;; Run the test
+(print (emirp-10k))
+(quit)
