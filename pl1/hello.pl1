@@ -1,0 +1,7 @@
+/* Hello world program in PL/I */
+HELLO: PROCEDURE OPTIONS(MAIN);
+  DECLARE I FIXED BINARY(16);
+  DO I = 1 TO 5;
+      PUT FILE (SCARDS) LIST('Hello, world!');
+      PUT FILE (SCARDS) SKIP;
+END HELLO;

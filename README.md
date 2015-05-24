@@ -12,6 +12,7 @@ Programming languages covered so far:
 * FORTRAN
 * LISP
 * MAD
+* PL/I
 * UTILISP
 
 Please feel free to raise an issue on Github if you have any problems running the code.
