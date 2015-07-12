@@ -1,0 +1,71 @@
+TEST: PROCEDURE OPTIONS(MAIN);
+  DECLARE RADIX_SORT ENTRY (FIXED DECIMAL, FIXED DECIMAL,
+                            FIXED BINARY(16),);
+
+  DECLARE NUMS(10) FIXED BINARY(16);
+  NUMS(1) = 3;       NUMS(6) = 1630;
+  NUMS(2) = 42;      NUMS(7) = 4;
+  NUMS(3) = 910;     NUMS(8) = 2721;
+  NUMS(4) = 3241;    NUMS(9) = 684;
+  NUMS(5) = 99;      NUMS(10) = 11;
+
+  CALL SHOW_ARR('Before', NUMS);
+  CALL RADIX_SORT(1, 10, 1000000000000000B, NUMS);
+  CALL SHOW_ARR('After', NUMS);
+
+  /* Do a MSD radix sort on the array ARR
+   * with dimensions FROM-TO starting sort at BIT */
+  RADIX_SORT: PROCEDURE(FROM, TO, BIT, ARR) RECURSIVE;
+    DECLARE (FROM, TO) FIXED DECIMAL;
+    DECLARE BIT FIXED BINARY(16);
+    DECLARE ARR(*) FIXED BINARY(16);
+
+    DECLARE (LEFT, RIGHT) FIXED DECIMAL;
+    DECLARE TEMP FIXED BINARY(16);
+
+    /* Exit early if bit down to zero or range is zero */
+    IF (BIT = 0) | (TO <= FROM) THEN RETURN;
+
+    LEFT = FROM;
+    RIGHT = TO;
+
+    LOOP:
+    /* Find the leftmost with the bit set */
+    DO WHILE ((LEFT < RIGHT) & ((ARR(LEFT) & BIT) = 0));
+      LEFT = LEFT + 1;
+    END;
+
+    /* Find the rightmost with the bit not set */
+    DO WHILE ((LEFT < RIGHT) & ((ARR(RIGHT) & BIT) ¬= 0));
+      RIGHT = RIGHT - 1;
+    END;
+
+    /* If found one of each, swap and loop again to look for more */
+    IF LEFT < RIGHT THEN BEGIN;
+      TEMP = ARR(LEFT);
+      ARR(LEFT) = ARR(RIGHT);
+      ARR(RIGHT) = TEMP;
+      GO TO LOOP;
+    END;
+
+    /* If nothing found, make the first sub search do the full range */
+    IF ((BIT & ARR(LEFT)) = 0) & (LEFT <= TO) THEN
+      LEFT = LEFT + 1;
+
+    /* The two ranges bounded by LEFT are now sorted by BIT.
+     * Sort each range by the next least significant bit */
+    BIT = BIT / 2;
+    CALL RADIX_SORT(FROM, LEFT-1, BIT, ARR);
+    CALL RADIX_SORT(LEFT, TO, BIT, ARR);
+  END RADIX_SORT;
+
+  /* Print the array */
+  SHOW_ARR: PROCEDURE(LABEL, ARR);
+    DECLARE LABEL CHARACTER(80) VARYING;
+    DECLARE ARR(*) FIXED BINARY(16);
+    PUT FILE (SCARDS) LIST(LABEL);
+    PUT FILE (SCARDS) SKIP;
+    PUT FILE (SCARDS) LIST(ARR);
+    PUT FILE (SCARDS) SKIP;
+  END SHOW_ARR;
+END TEST;
