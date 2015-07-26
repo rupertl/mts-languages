@@ -1,0 +1,6 @@
+* SNOBOL program to print Hello World
+      I = 1
+LOOP  OUTPUT = "Hello, world!"
+      I = I + 1
+      LE(I, 5) : S(LOOP)
+END
