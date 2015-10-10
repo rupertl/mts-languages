@@ -1,0 +1,68 @@
+* SNOBOL program to format dates
+
+* Get today's date
+        NOW = DATE()
+
+* Break it into parts
+        PART = SPAN("0123456789")
+        SEP  = "-"
+        NOW (PART . MONTH) SEP (PART . DAY) SEP (PART . YEAR)
+
+* Y2K! Assume 2 digit dates are from 20XX
+        CENTURY = 2000
+        CYEAR = YEAR + CENTURY
+        
+* Display in ISO format
+        ISO = CYEAR SEP MONTH SEP DAY
+        OUTPUT = ISO
+
+* Now calculate the weekday using Gauss' algorithm
+* GYEAR is the 4 digit year, unless Jan or Feb then subtract 2
+* GMONTH is MONTH-2 modulus 12, Jan is 11, Feb is 12
+        GT(MONTH, 2)               :S(G1)F(G2)
+G1      GYEAR = CYEAR
+        GMONTH = MONTH - 2         :(GX)
+G2      GYEAR = CYEAR - 1
+        EQ(MONTH, 1)               :S(G3)F(G4)
+G3      GMONTH = 11                :(GX)
+G4      GMONTH = 12                :(GX)
+GX      WDAY = REMDR(DAY, 7)
+* Calculate the month term 
+        MT = (2.6 * GMONTH) - 0.2
+* Add the month term - the 0.00005 is needed due to lack of FP precision        
+        WDAY = WDAY + REMDR(CONVERT(MT + 0.00005, 'INTEGER'), 7)
+        WDAY = WDAY + 5 * REMDR(REMDR(GYEAR, 4), 7)
+        WDAY = WDAY + 4 * REMDR(REMDR(GYEAR, 100), 7)
+        WDAY = WDAY + 6 * REMDR(REMDR(GYEAR, 400), 7)
+        WDAY = REMDR(WDAY, 7)
+
+* Set up an array for the month names
+        MONTHS = ARRAY("12")
+        MONTHS<1> = "January"
+        MONTHS<2> = "February"
+        MONTHS<3> = "March"
+        MONTHS<4> = "April"
+        MONTHS<5> = "May"
+        MONTHS<6> = "June"
+        MONTHS<7> = "July"
+        MONTHS<8> = "August"
+        MONTHS<9> = "September"
+        MONTHS<10> = "October"
+        MONTHS<11> = "November"
+        MONTHS<12> = "December"
+
+* And the same for days, indexed from 0 to 6
+        DAYS = ARRAY("0:6")
+        DAYS<0> = "Sunday"
+        DAYS<1> = "Monday"
+        DAYS<2> = "Tuesday"
+        DAYS<3> = "Wednesday"
+        DAYS<4> = "Thursday"
+        DAYS<5> = "Friday"
+        DAYS<6> = "Saturday"
+
+* Output in readable format
+        READABLE = DAYS<WDAY> ", " MONTHS<MONTH> " " DAY ", " CYEAR
+        OUTPUT = READABLE
+
+END

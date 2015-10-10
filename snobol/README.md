@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.sn` - Hello World example
+* `date.sn` - Print today's date in different formats
 
 ## Running SNOBOL programs in MTS
 
