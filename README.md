@@ -9,10 +9,12 @@ Programming languages covered so far:
 * ALGOL 60
 * ALGOL W
 * BASIC
+* FLECS
 * FORTRAN
 * LISP
 * MAD
 * PL/I
+* RATFOR
 * SNOBOL
 * UTILISP
 
