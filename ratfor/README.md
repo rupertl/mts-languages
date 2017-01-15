@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.r` - Hello World example
+* `emirp.r` - Emirp primes
 
 ## Running FORTRAN programs in MTS
 

@@ -1,0 +1,113 @@
+C     FLECS PROGRAM TO DISPLAY EMIRPS
+C
+C     *** TEST IF A NUMBER IS PRIME ***
+      LOGICAL FUNCTION PRIME(N)
+      INTEGER N
+C     DEAL WITH NUMBERS <= 3
+      IF (N .LE. 1) GOTO 200
+      IF (N .EQ. 2 .OR. N .EQ. 3) GOTO 100
+C     CHECK IF DIVISIBLE BY 2 OR 3
+      IF (MOD(N,2) .EQ. 0) GOTO 200
+      IF (MOD(N,3) .EQ. 0) GOTO 200
+C     SEE IF DIVISIBLE BY 5, 7, ..., UP TO APPROX SQRT(N)
+      DO (I=5,999999,2)
+      IF (I*I .GT. N) GOTO 100
+      IF (MOD(N,I) .EQ. 0) GOTO 200
+      FIN
+ 100  PRIME = .TRUE.
+      RETURN
+ 200  PRIME = .FALSE.
+      RETURN
+      END
+C
+C     *** REVERSE AN INTEGER'S DIGITS ***
+      INTEGER FUNCTION REVRSE(N)
+      INTEGER N
+      INTEGER M,R
+C     M IS COPY OF N FROM WHICH WE TAKE DIGITS
+C     R IS REVERSED DIGITS
+      M = N
+      R = 0
+C     LOOP UNTIL NO MORE DIGITS
+      UNTIL (M .LT. 1)
+C     TAKE LAST DIGIT FROM M AND APPEND TO R
+      R = R * 10
+      R = R + MOD(M, 10)
+      M = M / 10
+      FIN
+      REVRSE = R
+      RETURN
+      END
+C
+C     *** TEST IF AN INTEGER IS AN EMIRP ***
+      LOGICAL FUNCTION EMIRP(N)
+      INTEGER N
+C     EXTERNAL FUNCTIONS
+      INTEGER REVRSE
+      LOGICAL PRIME
+C     R CONTAINS REVERSED DIGITS OF N
+      INTEGER R
+      R = REVRSE(N)
+C     N AND R MUST BOTH BE PRIME AND NOT THE SAME VALUE
+      IF (N .NE. R)
+      IF (PRIME(N))
+      IF (PRIME(R))
+      EMIRP = .TRUE.
+      RETURN
+      FIN
+      FIN
+      FIN
+      EMIRP = .FALSE.
+      RETURN
+      END
+C
+C     *** DISPLAY AN INTEGER ***
+      SUBROUTINE SHOW(N)
+      INTEGER N
+      WRITE(6,50) N
+ 50   FORMAT(I10)
+      RETURN
+      END
+C
+C
+C     *** MAIN ENTRY POINT ***
+C     I IS COUNT OF EMIRPS FOUND
+C     N IS NUMBER TO TEST
+C     EXTERNAL FUNCTION
+      LOGICAL EMIRP
+      INTEGER I,N
+      TEST-1
+      TEST-2
+      TEST-3
+      STOP
+C
+C     *** SHOW FIRST 20 EMIRPS ***
+      TO TEST-1
+      N = 0
+      I = 0
+      WHILE (I .LT. 20)
+      N = N + 1
+      IF (EMIRP(N))
+      CALL SHOW(N)
+      I = I + 1
+      FIN
+      FIN
+      FIN
+C
+C     *** SHOW EMIRPS BETWEEN 7,700 AND 8,000 ***
+      TO TEST-2
+      DO (N=7700,8000)
+      IF (EMIRP(N)) CALL SHOW(N)
+      FIN
+      FIN
+C
+C     *** SHOW 10,000TH EMIRP ***
+      TO TEST-3
+      N = 0
+      DO (I=1,10000)
+      REPEAT UNTIL (EMIRP(N)) N = N + 1
+      FIN
+      CALL SHOW(N)
+      FIN
+C
+      END
