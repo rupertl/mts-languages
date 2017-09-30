@@ -9,14 +9,13 @@ Programming languages covered so far:
 * ALGOL 60
 * ALGOL W
 * BASIC
-* FLECS
+* FLECS and RATFOR (FORTRAN preprocessors)
 * FORTRAN
-* LISP
-* MAD
+* LISP and UTILISP
+* MAD (Michigan Algorithm Decoder)
+* PIL (Pittsburgh Interpretative Language)
 * PL/I
-* RATFOR
 * SNOBOL
-* UTILISP
 
 Please feel free to raise an issue on Github if you have any problems running the code.
 

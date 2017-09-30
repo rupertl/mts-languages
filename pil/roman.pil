@@ -1,0 +1,62 @@
+1.0    arabic(0) = 1000
+1.01   arabic(1) = 900
+1.02   arabic(2) = 500
+1.03   arabic(3) = 400
+1.04   arabic(4) = 100
+1.05   arabic(5) = 90
+1.06   arabic(6) = 50
+1.07   arabic(7) = 40
+1.08   arabic(8) = 10
+1.09   arabic(9) = 9
+1.1    arabic(10) = 5
+1.11   arabic(11) = 4
+1.12   arabic(12) = 1
+
+2.0    roman(0) = "M"
+2.01   roman(1) = "CM"
+2.02   roman(2) = "D"
+2.03   roman(3) = "CD"
+2.04   roman(4) = "C"
+2.05   roman(5) = "XC"
+2.06   roman(6) = "L"
+2.07   roman(7) = "XL"
+2.08   roman(8) = "X"
+2.09   roman(9) = "IX"
+2.1    roman(10) = "V"
+2.11   roman(11) = "IV"
+2.12   roman(12) = "I"
+
+5.0    * Main entry point to arabic -> roman converter
+5.01   * Input: a (arabic number to convert)
+5.02   * Output: r (roman number equivalent of a)
+5.025  r = ""
+5.026  do part 1
+5.027  do part 2
+5.03   for i = 0 to 12: do part 6
+5.04   done
+
+6.0    for j = 0 while a >= arabic(i): do part 7
+6.01   done
+
+7.0    r = r + roman(i)
+7.01   a = a - arabic(i)
+7.02   done
+
+10.0    demand a
+10.01   do part 5
+10.02   type r
+
+20.0    do part 5
+20.02   if r = re, then type "OK", r; else type "ERROR", r, re
+20.03   done
+
+21.0    a = 2009
+21.01   re = "MMIX"
+21.02   do part 20
+21.03   a = 1666
+21.04   re = "MDCLXVI"
+21.05   do part 20
+21.06   a = 3888
+21.07   re = "MMMDCCCLXXXVIII"
+21.08   do part 20
+21.09   done
