@@ -8,6 +8,7 @@ Programming languages covered so far:
 
 * ALGOL 60
 * ALGOL W
+* APL
 * BASIC
 * FLECS and RATFOR (FORTRAN preprocessors)
 * FORTRAN

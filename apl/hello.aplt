@@ -1,0 +1,6 @@
+"HELLO
+N=1
+'Hello, world!'
+N=N+1
+$GO 2 * N $LE 5
+"

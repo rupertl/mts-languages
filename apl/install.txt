@@ -1,0 +1,70 @@
+\                 100081               DECK                             100081 .
+$SIGNON APL. PRINTER=LINE T=120
+aardvarks
+ST01
+ST01
+get >t90b
+control *AFD* volume=5.0t1
+control *AFD* lbltype=vlo
+run *fs 0=*AFD*
+restore (1115) MTS.IFACE.S
+restore (1116) TRTAB.S
+restore (1117) MACROS
+restore (1118) ARTH.U
+restore (1119) DEXP.U
+restore (1120) DYIB.U
+restore (1121) IBAR.U
+restore (1122) OCTL.U
+restore (1123) REDU.U
+restore (1124) SLCT.U
+restore (1125) TPIN.U
+restore (1126) VECT.U
+restore (1127) AGOR.U
+restore (1128) DPY.U
+restore (1129) ERR.U
+restore (1130) CATN.S
+restore (1131) *APL
+restore (1132) MTS.SHARED
+restore (1133) MEMO_382.WF
+stop
+get >t90c
+control *AFD* volume=5.0t2
+control *AFD* lbltype=vlo
+run *fs 0=*AFD*
+restore (524) 001ADVANCEDE
+restore (525) 001APLCOURSE
+restore (526) 001CLASS
+restore (527) 001NEWS
+restore (528) 001PLOTFORMA
+restore (529) 001TYPEDRILL
+restore (530) 001WSFNS
+restore (531) 001EIGENVALUE
+restore (532) 001BRFNS
+restore (533) 002CATALOG
+restore (534) 002STP1
+restore (535) 002STP2
+restore (536) 002STP3
+restore (537) 002STP4
+restore (538) 002STP5
+restore (539) 002STP6
+restore (540) 002STP7
+restore (541) 002STP8
+restore (542) 003COMPLEX
+restore (543) 003INDEX
+restore (544) 003UTIL
+restore (545) 005ALGFORM
+restore (546) 005COGO
+restore (547) 005COMPCENT
+restore (548) 005CW
+restore (549) 005EDIT
+restore (550) 005MATRIXALG
+restore (551) 005SNOBOL
+restore (552) 005SRADEMO
+restore (553) 006KINGDOM
+restore (554) 999TESTS
+stop
+$filestatus
+$permit *APL Read Others
+$permit ? Read Others
+$control *APL Pkey=*APL
+$signoff
