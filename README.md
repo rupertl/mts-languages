@@ -17,6 +17,7 @@ Programming languages covered so far:
 * PIL (Pittsburgh Interpretative Language)
 * PL/I
 * SNOBOL
+* System/360 assembly language
 
 Please feel free to raise an issue on Github if you have any problems running the code.
 
