@@ -12,6 +12,7 @@ Programming languages covered so far:
 * BASIC
 * FLECS and RATFOR (FORTRAN preprocessors)
 * FORTRAN
+* GPSS (General Purpose Simulation System)
 * LISP and UTILISP
 * MAD (Michigan Algorithm Decoder)
 * PIL (Pittsburgh Interpretative Language)
