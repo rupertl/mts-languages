@@ -17,6 +17,7 @@ Programming languages covered so far:
 * MAD (Michigan Algorithm Decoder)
 * PIL (Pittsburgh Interpretative Language)
 * PL/I
+* PLUS (UBC PLUS)
 * SNOBOL
 * System/360 assembly language
 

@@ -1,0 +1,10 @@
+%Title := "Hello World Program";
+
+%Include(Sprint_String, Main);
+
+definition Main;
+  variable Count is Integer;
+  do Count := 1 to 5
+    Sprint_String("Hello, world!");
+  end do;
+end Main;
