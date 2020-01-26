@@ -1,0 +1,166 @@
+%Title := "Find text in files";
+
+/* Includes for types and routines used */
+%Include(Boolean, Numeric_Types, String_Types);
+%Include(Message_Initialize, Message, Message_Terminate);
+%Include(Scards_Varying, Sprint_Varying);
+%Include(Patbuild, Patfree, Patmatch);
+%Include(Trim);
+%Include(Getspace);
+
+
+/* Global constants and types */
+global Grep
+   /* Define how we will be using the pattern subrourines. We need to
+   ignore case as the pattern being passed to us via the PAR field on
+   the command line is always upper cases. */
+   constant Pattern_Flags is Patbuild_Nonfilename | Patbuild_Ignore_Case;
+
+   constant Wildcard_Character is "?";
+
+   /* The pat subroutines need a working area. */
+   type Pattern_Work_Area_Storage_Type is bit(32);
+   type Pattern_Work_Area_Type is pointer to Pattern_Work_Area_Storage_Type;
+   constant Pattern_Work_Area_Size is Byte_Size(Pattern_Work_Area_Storage_Type);
+
+   type Return_Code_Type is Short_Integer;
+
+   type Pattern_Struct is
+      record
+         Work_Area is Pattern_Work_Area_Type,
+         Error_Message is Varying_String,
+         Match_Count is Integer
+      end record;
+end global Grep;
+
+
+/* Procedure definitions */
+procedure Grep_Initialize is
+   procedure
+   reference parameters
+      Pattern is Pattern_Struct,
+      Pattern_Expression is Varying_String
+   result
+      Grep_Initialize_Result is Boolean
+   end;
+
+procedure Grep_Match is
+   procedure
+   reference parameters
+      Pattern is Pattern_Struct,
+      Query_Text is Varying_String
+   result
+      Match_Result is Boolean
+   end;
+
+procedure Grep_Terminate is
+   procedure
+   reference parameter
+      Pattern is Pattern_Struct
+   end;
+
+
+/* Main routines */
+%Include(Main);
+definition Main;
+   variable Msg is pointer to Stream_Type;
+   variable Pattern is Pattern_Struct;
+   variable Pattern_Expression is Varying_String;
+   variable Line is Varying_String;
+   variable Return_Code is Return_Code_Type;
+
+   Msg := Message_Initialize();
+
+   Pattern_Expression := Trim(Par);
+   if not Grep_Initialize(Pattern, Pattern_Expression)
+   then
+      Message(Msg, "<v></>", Pattern.Error_Message);
+   else
+      /* Read lines from SCARDS and print any that match. */
+      cycle
+         Scards_Varying(Line, Return_Code);
+         if Return_Code > 0
+         then
+            exit;
+         end if;
+         if Grep_Match(Pattern, Line)
+         then
+            Sprint_Varying(Line);
+         end if ;
+      end cycle;
+      Message(Msg, "<i> match(es) found</>", Pattern.Match_Count);
+      Grep_Terminate(Pattern);
+   end if;
+
+   Message_Terminate(Msg);
+end Main;
+
+
+/* Macro */
+macro Get_String_Text_And_Length
+   /* Given a Varying_String, get the address of the underlying
+      Fixed_String and copy the length to an Integer variable. This is
+      needed for the calls to system subrountines like Patbuild below. */
+   parameters are V_String, Text_Ptr, Len;
+   equate V_String_Struct to V_String as Varying_String_Structure_Type;
+   equate Text to V_String_Struct.Varying_String_Text as Fixed_String;
+   Text_Ptr := Address(Text);
+   Len := Length(V_String);
+end macro;
+
+
+/* Subroutines */
+definition Grep_Initialize;
+   Pattern.Match_Count := 0;
+   Pattern.Error_Message := "";
+   Pattern.Work_Area := Getspace(0, Pattern_Work_Area_Size);
+
+   if Length(Pattern_Expression) = 0
+   then
+      Pattern.Error_Message := "Missing pattern in PAR field";
+      return with False;
+   end if;
+
+   /* Add leading and trailing wildcards to match anywhere on a line. */
+   variable Match_In_Line is Varying_String;
+   Match_In_Line := Wildcard_Character || Pattern_Expression ||
+                    Wildcard_Character;
+
+   variable Len is Integer;
+   variable Text_Ptr is pointer to Fixed_String;
+   Get_String_Text_And_Length(Match_In_Line, Text_Ptr, Len);
+
+   variable Return_Code is Return_Code_Type;
+   Patbuild(Text_Ptr@, Len, Pattern.Work_Area, Pattern_Flags,
+            return code Return_Code);
+
+   /* Any error code greater than this is unrecoveable. */
+   constant Patbuild_Error_Code_Threshold is 8;
+   if Return_Code > Patbuild_Error_Code_Threshold
+   then
+      Pattern.Error_Message := "Error constructing pattern";
+      return with False;
+   end if;
+
+   return with True;
+end Grep_Initialize;
+
+definition Grep_Match;
+   variable Len is Integer;
+   variable Text_Ptr is pointer to Fixed_String;
+   Get_String_Text_And_Length(Query_Text, Text_Ptr, Len);
+
+   variable Return_Code is Return_Code_Type;
+   Patmatch(Text_Ptr@, Len, Pattern.Work_Area, return code Return_Code);
+
+   if Return_Code = 0
+   then
+      Pattern.Match_Count +:= 1;
+      return with True;
+   end if;
+   return with False;
+end Grep_Match;
+
+definition Grep_Terminate;
+   Patfree(Pattern.Work_Area);
+end Grep_Terminate;

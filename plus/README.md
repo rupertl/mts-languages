@@ -1,6 +1,7 @@
 ## Files in this directory
 
 * `hello.plus` - Hello World example
+* `grep.plus` - File pattern matching
 
 ## Running PLUS programs in MTS
 
