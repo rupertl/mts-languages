@@ -18,6 +18,7 @@ Programming languages covered so far:
 * PIL (Pittsburgh Interpretative Language)
 * PL/I
 * PLUS (UBC PLUS)
+* PL360
 * SNOBOL
 * System/360 assembly language
 
